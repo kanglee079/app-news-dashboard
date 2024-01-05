@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import '../apps/helper/show_toast.dart';
+import '../apps/route/route_name.dart';
+import '../services/firebase_service.dart';
+
 class NewsArticleItem extends StatelessWidget {
-  final String id;
+  final String articleId;
   final String title;
   final String authorName;
   final DateTime dateTime;
@@ -12,7 +16,7 @@ class NewsArticleItem extends StatelessWidget {
 
   const NewsArticleItem({
     Key? key,
-    required this.id,
+    required this.articleId,
     required this.title,
     required this.authorName,
     required this.dateTime,
@@ -32,7 +36,10 @@ class NewsArticleItem extends StatelessWidget {
           children: [
             const SizedBox(width: 2),
             SlidableAction(
-              onPressed: (context) {},
+              onPressed: (context) {
+                Navigator.pushNamed(context, RouteName.manageEditNewsPage,
+                    arguments: articleId);
+              },
               backgroundColor: Colors.grey,
               foregroundColor: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -41,7 +48,8 @@ class NewsArticleItem extends StatelessWidget {
             ),
             const SizedBox(width: 1),
             SlidableAction(
-              onPressed: (context) {},
+              onPressed: (context) =>
+                  _showDeleteConfirmationDialog(context, articleId),
               backgroundColor: Colors.grey,
               foregroundColor: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -54,7 +62,8 @@ class NewsArticleItem extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Theme.of(context).hintColor,
+            color: Colors.white,
+            border: Border.all(color: Colors.black, width: 2),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Row(
@@ -107,4 +116,37 @@ class NewsArticleItem extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showDeleteConfirmationDialog(BuildContext context, String articleId) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          'Xác Nhận Xoá',
+          style: TextStyle(color: Colors.black, fontSize: 25),
+        ),
+        content: const Text('Bạn có chắc chắn muốn xoá danh mục này không?'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Huỷ'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Xoá'),
+            onPressed: () {
+              try {
+                FirebaseService().deleteArticle(articleId);
+                Navigator.of(context).pop();
+                showToastSuccess("Xoá thành công");
+              } catch (e) {}
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

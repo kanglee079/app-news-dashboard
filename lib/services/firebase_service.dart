@@ -103,4 +103,23 @@ class FirebaseService {
       return null;
     }
   }
+
+  //---------------------------------------
+  // Hàm lấy số lượng người dùng
+  Future<int> getUserCount() async {
+    QuerySnapshot snapshot = await _firestore.collection('users').get();
+    return snapshot.docs.length;
+  }
+
+  // Hàm lấy số lượng bài viết
+  Future<int> getArticleCount() async {
+    QuerySnapshot snapshot = await _firestore.collection('articles').get();
+    return snapshot.docs.length;
+  }
+
+  // Hàm lấy số lượng danh mục
+  Future<int> getCategoryCount() async {
+    QuerySnapshot snapshot = await _firestore.collection('categories').get();
+    return snapshot.docs.length;
+  }
 }

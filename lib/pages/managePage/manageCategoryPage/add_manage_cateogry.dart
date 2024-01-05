@@ -49,7 +49,6 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTextField(
                 nameField: "Tên thể loại:",
@@ -62,44 +61,30 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                 icon: Icons.category_outlined,
                 controller: descriptionController,
               ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: InkWell(
-          onTap: () async {
-            Category newCategory = Category(
-              id: DateTime.now().millisecondsSinceEpoch.toString(),
-              name: nameCategoryController.text,
-              description: descriptionController.text,
-            );
-            try {
-              await FirebaseService().addCategory(newCategory);
-              showToastSuccess("Thêm danh mục thành công");
-              nameCategoryController.clear();
-              descriptionController.clear();
-            } catch (e) {
-              showToastError("Lỗi: $e");
-              print(e);
-            }
-          },
-          child: Ink(
-            decoration: const BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(15),
-              ),
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: Center(
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () async {
+                  Category newCategory = Category(
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    name: nameCategoryController.text,
+                    description: descriptionController.text,
+                  );
+                  try {
+                    await FirebaseService().addCategory(newCategory);
+                    showToastSuccess("Thêm danh mục thành công");
+                    nameCategoryController.clear();
+                    descriptionController.clear();
+                  } catch (e) {
+                    showToastError("Lỗi: $e");
+                    print(e);
+                  }
+                },
                 child: Text(
                   "Thêm thể loại",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:app_dashboard_news/apps/helper/show_toast.dart';
 import 'package:app_dashboard_news/apps/route/route_name.dart';
 import 'package:app_dashboard_news/models/category.dart';
 import 'package:app_dashboard_news/services/firebase_service.dart';
@@ -47,7 +48,7 @@ class ItemCategory extends StatelessWidget {
             const SizedBox(width: 2),
             SlidableAction(
               onPressed: (context) =>
-                  FirebaseService().deleteCategory(idCategory!),
+                  _showDeleteConfirmationDialog(context, idCategory!),
               backgroundColor: Colors.grey,
               foregroundColor: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -70,4 +71,37 @@ class ItemCategory extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showDeleteConfirmationDialog(BuildContext context, String categoryId) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          'Xác Nhận Xoá',
+          style: TextStyle(color: Colors.black, fontSize: 25),
+        ),
+        content: const Text('Bạn có chắc chắn muốn xoá danh mục này không?'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Huỷ'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Xoá'),
+            onPressed: () {
+              try {
+                FirebaseService().deleteCategory(categoryId);
+                Navigator.of(context).pop();
+                showToastSuccess("Xoá thành công");
+              } catch (e) {}
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -18,7 +18,7 @@ class ManageNewsPage extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            "Sách",
+            "Quản lí tin tức",
             style: Theme.of(context).textTheme.bodyLarge,
             textAlign: TextAlign.center,
           ),
@@ -57,7 +57,7 @@ class ManageNewsPage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final article = snapshot.data![index];
                         return NewsArticleItem(
-                          id: article.id,
+                          articleId: article.id,
                           title: article.title,
                           authorName: article.authorName,
                           dateTime: article.dateTime,

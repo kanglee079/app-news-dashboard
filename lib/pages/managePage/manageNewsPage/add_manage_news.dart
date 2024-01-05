@@ -45,6 +45,19 @@ class _AddNewsArticleScreenState extends State<AddNewsArticleScreen> {
     super.dispose();
   }
 
+  bool _validateInput() {
+    if (titleController.text.isEmpty ||
+        authorNameController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        contentController.text.isEmpty ||
+        photoUrlController.text.isEmpty ||
+        selectedCategoryId == null) {
+      showToastError("Vui lòng nhập đầy đủ thông tin!");
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -65,23 +78,34 @@ class _AddNewsArticleScreenState extends State<AddNewsArticleScreen> {
               ),
               const SizedBox(height: 10),
               // Dropdown for categories
-              DropdownButtonFormField<String>(
-                value: selectedCategoryId,
-                hint: const Text('Chọn danh mục'),
-                dropdownColor: Colors.grey,
-                style: const TextStyle(color: Colors.black),
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedCategoryId = newValue;
-                  });
-                },
-                items: categories
-                    .map<DropdownMenuItem<String>>((Category category) {
-                  return DropdownMenuItem<String>(
-                    value: category.id,
-                    child: Text(category.name),
-                  );
-                }).toList(),
+              Row(
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text("Chọn danh mục"),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: DropdownButtonFormField<String>(
+                      value: selectedCategoryId,
+                      hint: const Text('Chọn danh mục'),
+                      dropdownColor: Colors.grey,
+                      style: const TextStyle(color: Colors.black),
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedCategoryId = newValue;
+                        });
+                      },
+                      items: categories
+                          .map<DropdownMenuItem<String>>((Category category) {
+                        return DropdownMenuItem<String>(
+                          value: category.id,
+                          child: Text(category.name),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               CustomTextField(
@@ -118,27 +142,34 @@ class _AddNewsArticleScreenState extends State<AddNewsArticleScreen> {
                 },
                 controlAffinity: ListTileControlAffinity.leading,
               ),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
-                  // Handle the article addition logic
-                  try {
-                    NewsArticle newArticle = NewsArticle(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      idCategory: selectedCategoryId ?? '',
-                      isFeatured: isFeatured,
-                      title: titleController.text,
-                      authorName: authorNameController.text,
-                      dateTime: DateTime.now(),
-                      description: descriptionController.text,
-                      content: contentController.text,
-                      comments: [],
-                      photoUrl: photoUrlController.text,
-                      likes: 0,
-                    );
-                    await FirebaseService().addArticle(newArticle);
-                    showToastSuccess("Thêm tin tức thành công");
-                  } catch (e) {
-                    showToastError("Error: $e");
+                  if (_validateInput()) {
+                    try {
+                      NewsArticle newArticle = NewsArticle(
+                        id: DateTime.now().millisecondsSinceEpoch.toString(),
+                        idCategory: selectedCategoryId ?? '',
+                        isFeatured: isFeatured,
+                        title: titleController.text,
+                        authorName: authorNameController.text,
+                        dateTime: DateTime.now(),
+                        description: descriptionController.text,
+                        content: contentController.text,
+                        comments: [],
+                        photoUrl: photoUrlController.text,
+                        likes: 0,
+                      );
+                      await FirebaseService().addArticle(newArticle);
+                      titleController.clear();
+                      authorNameController.clear();
+                      descriptionController.clear();
+                      contentController.clear();
+                      photoUrlController.clear();
+                      showToastSuccess("Thêm tin tức thành công");
+                    } catch (e) {
+                      showToastError("Error: $e");
+                    }
                   }
                 },
                 child: const Text('Thêm tin tức'),

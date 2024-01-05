@@ -56,8 +56,11 @@ class RouterCustom {
           builder: (context) => const AddNewsArticleScreen(),
         );
       case RouteName.manageEditNewsPage:
+        var articleId = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (context) => const EditNewsPage(),
+          builder: (context) => EditNewsArticlePage(
+            articleId: articleId,
+          ),
         );
 
       default:
