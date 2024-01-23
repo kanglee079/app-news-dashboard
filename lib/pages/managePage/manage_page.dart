@@ -39,6 +39,12 @@ class ManagePage extends StatelessWidget {
             },
           ),
           ItemAdminPage(
+            nameItem: "Videos",
+            ontap: () {
+              Navigator.pushNamed(context, RouteName.manageNewsVideoPage);
+            },
+          ),
+          ItemAdminPage(
             nameItem: "Người dùng",
             ontap: () {},
           ),

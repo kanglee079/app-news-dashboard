@@ -13,6 +13,7 @@ class _StatsPageState extends State<StatsPage> {
   int numUsers = 0;
   int numArticles = 0;
   int numCategories = 0;
+  int numVideo = 0;
 
   @override
   void initState() {
@@ -24,6 +25,7 @@ class _StatsPageState extends State<StatsPage> {
     numUsers = await FirebaseService().getUserCount();
     numArticles = await FirebaseService().getArticleCount();
     numCategories = await FirebaseService().getCategoryCount();
+    numVideo = await FirebaseService().getVideoCount();
     setState(() {});
   }
 
@@ -57,6 +59,8 @@ class _StatsPageState extends State<StatsPage> {
                 _buildStatCard("Số bài viết hiện tại", numArticles),
                 const SizedBox(width: 30),
                 _buildStatCard("Số danh mục hiện tại", numCategories),
+                const SizedBox(width: 30),
+                _buildStatCard("Số Video hiện tại", numVideo),
               ],
             ),
           ],
@@ -76,7 +80,14 @@ Widget _buildStatCard(String title, int count) {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
         child: Center(
-          child: Text("$title: $count"),
+          child: Text(
+            "$title: $count",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ),
     ),

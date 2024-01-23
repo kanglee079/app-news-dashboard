@@ -1,4 +1,5 @@
 import 'package:app_dashboard_news/models/category.dart';
+import 'package:app_dashboard_news/models/news_video.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/news_article.dart';
@@ -121,5 +122,45 @@ class FirebaseService {
   Future<int> getCategoryCount() async {
     QuerySnapshot snapshot = await _firestore.collection('categories').get();
     return snapshot.docs.length;
+  }
+
+  Future<int> getVideoCount() async {
+    QuerySnapshot snapshot = await _firestore.collection('videos').get();
+    return snapshot.docs.length;
+  }
+
+  //----------------------
+  Future<void> addVideo(NewsVideo video) async {
+    await _firestore.collection('videos').doc(video.id).set(video.toMap());
+  }
+
+  Future<void> updateVideo(NewsVideo video) async {
+    await _firestore.collection('videos').doc(video.id).update(video.toMap());
+  }
+
+  Future<void> deleteVideo(String videoId) async {
+    await _firestore.collection('videos').doc(videoId).delete();
+  }
+
+  Stream<List<NewsVideo>> streamVideo() {
+    return _firestore.collection('videos').snapshots().map((snapshot) =>
+        snapshot.docs.map((doc) => NewsVideo.fromMap(doc.data())).toList());
+  }
+
+  Future<NewsVideo?> getVideoById(String videoId) async {
+    try {
+      DocumentSnapshot docSnapshot =
+          await _firestore.collection('videos').doc(videoId).get();
+
+      if (docSnapshot.exists) {
+        return NewsVideo.fromMap(docSnapshot.data() as Map<String, dynamic>);
+      } else {
+        print("Không tìm thấy bài viết với ID: $videoId");
+        return null;
+      }
+    } catch (e) {
+      print("Lỗi khi lấy thông tin bài viết: $e");
+      return null;
+    }
   }
 }

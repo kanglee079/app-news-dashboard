@@ -5,11 +5,14 @@ import 'package:app_dashboard_news/pages/managePage/manageCategoryPage/manage_ca
 import 'package:app_dashboard_news/pages/managePage/manageNewsPage/add_manage_news.dart';
 import 'package:app_dashboard_news/pages/managePage/manageNewsPage/edit_manage_news.dart';
 import 'package:app_dashboard_news/pages/managePage/manageNewsPage/manage_news_page.dart';
+import 'package:app_dashboard_news/pages/managePage/manageNewsVideoPage/edit_manage_news_video.dart';
+import 'package:app_dashboard_news/pages/managePage/manageNewsVideoPage/manage_news_video_page.dart';
 import 'package:app_dashboard_news/pages/my_app.dart';
 import 'package:app_dashboard_news/pages/settingPage/setting_page.dart';
 import 'package:app_dashboard_news/pages/statePage/state_page.dart';
 import 'package:flutter/material.dart';
 
+import '../../pages/managePage/manageNewsVideoPage/add_manage_new_video.dart';
 import '../../pages/managePage/manage_page.dart';
 import 'route_name.dart';
 
@@ -60,6 +63,21 @@ class RouterCustom {
         return MaterialPageRoute(
           builder: (context) => EditNewsArticlePage(
             articleId: articleId,
+          ),
+        );
+      case RouteName.manageNewsVideoPage:
+        return MaterialPageRoute(
+          builder: (context) => const ManageNewsVideoPage(),
+        );
+      case RouteName.manageAddNewsVideoPage:
+        return MaterialPageRoute(
+          builder: (context) => const AddNewsVideoScreen(),
+        );
+      case RouteName.manageEditNewsVideoPage:
+        var videoId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => EditNewsVideoPage(
+            videoId: videoId,
           ),
         );
 

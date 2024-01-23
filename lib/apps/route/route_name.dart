@@ -13,4 +13,7 @@ class RouteName {
   static const String manageNewsPage = "manageNewsPage";
   static const String manageAddNewsPage = "manageAddNewsPage";
   static const String manageEditNewsPage = "manageEditNewsPage";
+  static const String manageEditNewsVideoPage = "manageEditNewsVideoPage";
+  static const String manageAddNewsVideoPage = "manageAddNewsVideoPage";
+  static const String manageNewsVideoPage = "manageNewsVideoPage";
 }
